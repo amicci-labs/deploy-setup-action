@@ -7,6 +7,9 @@ inputs:
     description: the aws account id
     required: false
     default: "149592216170"
+  gh-token:
+    description: the github token used to login in the ghcr
+    required: true
 
 runs:
   using: 'composite'
@@ -33,7 +36,7 @@ runs:
       with:
         registry: ${{ env.GH_CR }}
         username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
+        password: ${{ inputs.gh-token }}
 
     - name: Install helm ssm plugin
       uses: amicci-labs/helm-ssm-plugin-action@master
