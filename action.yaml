@@ -1,0 +1,53 @@
+name: Setup Deploy
+description: Configure credentions and Repo files to deploy
+author: Robson Andrade
+
+inputs:
+  aws-account-id:
+    description: the aws account id
+    required: false
+    default: "149592216170"
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3.0.0
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v4 
+      with:
+        aws-region: ${{ env.AWS_DEFAULT_REGION }}
+
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v2
+      with:
+        registries: ${{ inputs.aws-account-id }}
+
+    - name: Log into registry ${{ env.GH_CR }}
+      uses: docker/login-action@v3.0.0
+      with:
+        registry: ${{ env.GH_CR }}
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Install helm ssm plugin
+      uses: amicci-labs/helm-ssm-plugin-action@master
+
+    - name: Get version from commit hash
+      shell: bash
+      run: |
+        echo "VERSION=`echo ${{ github.sha }} | cut -c1-7`" >> $GITHUB_ENV
+
+    - name: Set kubeconfig
+      shell: bash
+      env:
+        AWS_ACCOUNT_ID: ${{ inputs.aws-account-id }}
+      run: |
+        aws eks --region us-east-1 update-kubeconfig \
+          --name ${{ env.K8S_CLUSTER }} \
+          --role-arn "arn:aws:iam::${AWS_ACCOUNT_ID}:role/${{ env.AWS_TAG_ENV }}-eks-admin"
