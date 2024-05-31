@@ -53,4 +53,3 @@ runs:
       run: |
         aws eks --region us-east-1 update-kubeconfig \
           --name ${{ env.K8S_CLUSTER }} \
-          --role-arn "arn:aws:iam::${AWS_ACCOUNT_ID}:role/${{ env.AWS_TAG_ENV }}-eks-admin"
