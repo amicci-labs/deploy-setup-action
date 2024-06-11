@@ -22,6 +22,16 @@ runs:
       #with:
         #aws-region: ${{ env.AWS_DEFAULT_REGION }}
 
+    - name: Configure AWS credentials
+      run: |
+        mkdir ~/.aws
+        echo "[default]" >  ~/.aws/credentials
+        echo "aws_access_key_id = ${AWS_ACCESS_KEY_ID}" >> ~/.aws/credentials
+        echo "aws_secret_access_key = ${AWS_SECRET_ACCESS_KEY}" >> ~/.aws/credentials
+        echo "[default]" > ~/.aws/config
+        echo "region = ${AWS_DEFAULT_REGION}" >> ~/.aws/config
+        echo "output = json" >> ~/.aws/config
+
     - name: Login to Amazon ECR
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v2
@@ -45,8 +55,8 @@ runs:
 
     - name: Set kubeconfig
       shell: bash
-      env:
-        AWS_ACCOUNT_ID: ${{ inputs.aws-account-id }}
+      #env:
+        #AWS_ACCOUNT_ID: ${{ inputs.aws-account-id }}
       run: |
         aws eks --region us-east-1 update-kubeconfig \
-          --name ${{ env.K8S_CLUSTER }} \
+          --name ${{ env.K8S_CLUSTER }}
