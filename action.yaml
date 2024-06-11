@@ -27,16 +27,16 @@ runs:
         #aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
         #aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
 
-    - name: Configure AWS credentials
-      shell: bash
-      run: |
-        mkdir ~/.aws
-        echo "[default]" >  ~/.aws/credentials
-        echo "aws_access_key_id = ${{ env.AWS_ACCESS_KEY_ID }}" >> ~/.aws/credentials
-        echo "aws_secret_access_key = ${{ env.AWS_SECRET_ACCESS_KEY }}" >> ~/.aws/credentials
-        echo "[default]" > ~/.aws/config
-        echo "region = ${{ env.AWS_DEFAULT_REGION }}" >> ~/.aws/config
-        echo "output = json" >> ~/.aws/config
+    #- name: Configure AWS credentials
+      #shell: bash
+      #run: |
+        #mkdir ~/.aws
+        #echo "[default]" >  ~/.aws/credentials
+        #echo "aws_access_key_id = ${{ env.AWS_ACCESS_KEY_ID }}" >> ~/.aws/credentials
+        #echo "aws_secret_access_key = ${{ env.AWS_SECRET_ACCESS_KEY }}" >> ~/.aws/credentials
+        #echo "[default]" > ~/.aws/config
+        #echo "region = ${{ env.AWS_DEFAULT_REGION }}" >> ~/.aws/config
+        #echo "output = json" >> ~/.aws/config
 
     - name: Login to AWS ECR
       shell: bash
