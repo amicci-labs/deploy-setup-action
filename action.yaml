@@ -44,7 +44,7 @@ runs:
     - name: Get version from commit hash
       shell: bash
       run: |
-        echo "VERSION=\"`echo ${{ github.sha }} | cut -c1-7`\"" >> $GITHUB_ENV
+        echo "VERSION=`echo ${{ github.sha }} | cut -c1-7`" >> $GITHUB_ENV
 
     - name: Set kubeconfig
       shell: bash
